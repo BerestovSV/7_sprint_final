@@ -73,10 +73,8 @@ func TestCafeCount(t *testing.T) {
 		handler.ServeHTTP(response, req)
 
 		answerStatus := response.Result()
-		if answerStatus.StatusCode != http.StatusOK {
-			t.Errorf("count=%d: expected status 200, got %d", r.count, answerStatus.StatusCode)
-			continue
-		}
+
+		assert.Equal(t, http.StatusOK, answerStatus.StatusCode)
 
 		body := response.Body.String()
 		got := 0
@@ -84,9 +82,7 @@ func TestCafeCount(t *testing.T) {
 			got = len(strings.Split(body, ","))
 		}
 
-		if got != r.want {
-			t.Errorf("count=%d: expected %d cafes, got %d", r.count, r.want, got)
-		}
+		assert.Equal(t, r.want, got)
 	}
 
 }
@@ -113,10 +109,8 @@ func TestCafeSearch(t *testing.T) {
 		handler.ServeHTTP(resp, req)
 
 		answerStatus := resp.Result()
-		if answerStatus.StatusCode != http.StatusOK {
-			t.Errorf("search=%s: expected 200, got %d", r.search, answerStatus.StatusCode)
-			continue
-		}
+
+		assert.Equal(t, http.StatusOK, answerStatus.StatusCode)
 
 		body := resp.Body.String()
 		var cafes []string
@@ -124,10 +118,7 @@ func TestCafeSearch(t *testing.T) {
 			cafes = strings.Split(body, ",")
 		}
 
-		if len(cafes) != r.want {
-			t.Errorf("search=%s: expected %d, got %d", r.search, r.want, len(cafes))
-			continue
-		}
+		assert.Equal(t, r.want, len(cafes))
 
 		lowerSearch := strings.ToLower(r.search)
 		for _, cafe := range cafes {
